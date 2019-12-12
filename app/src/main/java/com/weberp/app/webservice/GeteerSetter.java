@@ -1,6 +1,9 @@
 package com.weberp.app.webservice;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sql.DataSource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -10,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.google.gson.Gson;
+import com.weberp.app.dataaccessobjects.AppUser;
 import com.weberp.app.dataaccessobjects.BussinessContactDAO;
 import com.weberp.app.dataobjects.City;
 import com.weberp.app.dataobjects.Country;
@@ -37,16 +41,22 @@ public class GeteerSetter {
 	public String getSetup() {
 		
 		ApplicationContext context = new AnnotationConfigApplicationContext("com.weberp.app");
+		AppUser user = context.getBean("appUser", AppUser.class);
+		user.setUserDBA();
 		BussinessContactDAO dao = context.getBean("bussinessContactDAO", BussinessContactDAO.class);
 		
-		City[] cityholder = (new City()).getAll();
-		Country[] countryholder = (new Country()).getAll();
-		SupplyCategory[] Supplyholder = (new SupplyCategory()).getAll();
-		Position[] Positionholder = (new Position()).getAll();
+		List<Object> result = new ArrayList<Object>();
+		List<City> cityholder = dao.getCities();
+		result.add(cityholder);
+		List<Country> countryholder = dao.getCountries();
+		result.add(countryholder);
+		List<SupplyCategory> Supplyholder = dao.getSupplyCategories();
+		result.add(Supplyholder);
+		//List<Position> Positionholder = dao.getCountries();
 	      
 
 	      
-		return new Gson().toJson(cityholder);
+		return new Gson().toJson(result);
 	}
 	
 	@POST

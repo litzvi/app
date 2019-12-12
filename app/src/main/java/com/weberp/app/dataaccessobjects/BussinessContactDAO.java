@@ -90,7 +90,7 @@ public class BussinessContactDAO extends DataAccessObject {
 	 * @return
 	 */
 	public List<Country> getCountries() {
-		return getJdbcTemplateObject().query("selct * from countries", new CountryMapper());
+		return getJdbcTemplateObject().query("select * from countries", new CountryMapper());
 	}
 	
 	/**
@@ -98,7 +98,7 @@ public class BussinessContactDAO extends DataAccessObject {
 	 * @return
 	 */
 	public List<City> getCities() {
-		return getJdbcTemplateObject().query("selct * from cities", new CityMapper());
+		return getJdbcTemplateObject().query("select * from cities", new CityMapper());
 	}
 	
 	
@@ -107,7 +107,7 @@ public class BussinessContactDAO extends DataAccessObject {
 	 * @return
 	 */
 	public List<SupplyCategory> getSupplyCategories() {
-		return getJdbcTemplateObject().query("selct * from supply_category", new SupplyCategoryMapper());
+		return getJdbcTemplateObject().query("select * from supply_category", new SupplyCategoryMapper());
 	}
 	
 }

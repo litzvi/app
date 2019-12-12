@@ -7,7 +7,7 @@
    <bean id="DBA" class = "java.util.HashSet">
       <constructor-arg>
          <set>
-            <value>DataAccessObject</value>
+            <value>BussinessContactDAO</value>
          </set>
       </constructor-arg>
    </bean>
@@ -15,7 +15,7 @@
    <bean id="view" class = "java.util.HashSet">
       <constructor-arg>
          <set>
-            <value>DataAccessObject</value>  
+            <value>BussinessContactDAO</value>  
          </set>
       </constructor-arg>
    </bean>
