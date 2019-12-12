@@ -119,6 +119,7 @@ public class AppUser extends DataAccessObject implements Permission{
 
 
 	public boolean hasPermission(Object serviceObj) {
+		System.out.println(privilegedClasses);
 		if(privilegedClasses.contains(serviceObj.getClass().getSimpleName())) {
 			return true;
 		}

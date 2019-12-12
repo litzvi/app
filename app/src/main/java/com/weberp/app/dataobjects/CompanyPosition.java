@@ -11,6 +11,9 @@ public class CompanyPosition {
 	private int id;
 	private String name;
 	
+	public CompanyPosition() {
+		
+	}
 	
 	public CompanyPosition(int id, String name) {
 		super();

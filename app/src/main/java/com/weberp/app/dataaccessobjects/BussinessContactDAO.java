@@ -22,11 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.weberp.app.dataaccessobjects.services.PreparedStatementCreatorImpl;
 import com.weberp.app.dataobjects.City;
 import com.weberp.app.dataobjects.Company;
+import com.weberp.app.dataobjects.CompanyPosition;
 import com.weberp.app.dataobjects.Country;
 import com.weberp.app.dataobjects.Supplier;
 import com.weberp.app.dataobjects.SupplyCategory;
 import com.weberp.app.dataobjects.mappers.CityMapper;
 import com.weberp.app.dataobjects.mappers.CountryMapper;
+import com.weberp.app.dataobjects.mappers.CompanyPositionsMapper;
 import com.weberp.app.dataobjects.mappers.SupplyCategoryMapper;
 
 /**
@@ -90,7 +92,7 @@ public class BussinessContactDAO extends DataAccessObject {
 	 * @return
 	 */
 	public List<Country> getCountries() {
-		return getJdbcTemplateObject().query("selct * from countries", new CountryMapper());
+		return getJdbcTemplateObject().query("select * from countries", new CountryMapper());
 	}
 	
 	/**
@@ -98,7 +100,7 @@ public class BussinessContactDAO extends DataAccessObject {
 	 * @return
 	 */
 	public List<City> getCities() {
-		return getJdbcTemplateObject().query("selct * from cities", new CityMapper());
+		return getJdbcTemplateObject().query("select * from cities", new CityMapper());
 	}
 	
 	
@@ -107,7 +109,15 @@ public class BussinessContactDAO extends DataAccessObject {
 	 * @return
 	 */
 	public List<SupplyCategory> getSupplyCategories() {
-		return getJdbcTemplateObject().query("selct * from supply_category", new SupplyCategoryMapper());
+		return getJdbcTemplateObject().query("select * from supply_category", new SupplyCategoryMapper());
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<CompanyPosition> getPositions() {
+		return getJdbcTemplateObject().query("select * from company_positions", new CompanyPositionsMapper());
 	}
 	
 }

@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.google.gson.Gson;
+import com.weberp.app.dataaccessobjects.AppUser;
 import com.weberp.app.dataaccessobjects.BussinessContactDAO;
 import com.weberp.app.dataobjects.City;
 import com.weberp.app.dataobjects.Country;
@@ -37,6 +38,8 @@ public class GeteerSetter {
 	public String getSetup() {
 		
 		ApplicationContext context = new AnnotationConfigApplicationContext("com.weberp.app");
+		AppUser user = context.getBean("appUser", AppUser.class);
+		user.setUserDBA();
 		BussinessContactDAO dao = context.getBean("bussinessContactDAO", BussinessContactDAO.class);
 		
 		City[] cityholder = (new City()).getAll();
