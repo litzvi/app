@@ -1,8 +1,8 @@
-<!DOCTYPE web-app PUBLIC
+<!DOCTYPE web-com.weberp.app PUBLIC
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
-<web-app>
+<web-com.weberp.app>
   <display-name>Archetype Created Web Application</display-name>
   
   <servlet>
@@ -11,7 +11,7 @@
      <!-- Register resources and providers under com.vogella.jersey.first package. -->
     <init-param>
         <param-name>jersey.config.server.provider.packages</param-name>
-        <param-value>webservice</param-value>
+        <param-value>com.weberp.app.webservice</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -19,5 +19,13 @@
     <servlet-name>Jersey REST Service</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
-  
-</web-app>
+  <!-- 
+	<context-param>
+	    <param-name>contextConfigLocation</param-name>
+	    <param-value>classpath:Beans.xml</param-value>
+	</context-param>
+	<listener>
+	    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+   -->
+</web-com.weberp.app>
