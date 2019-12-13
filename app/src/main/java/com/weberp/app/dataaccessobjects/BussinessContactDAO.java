@@ -106,8 +106,16 @@ public class BussinessContactDAO extends DataAccessObject {
 	 * 
 	 * @return
 	 */
-	public List<SupplyCategory> getSupplyCategories() {
-		return getJdbcTemplateObject().query("select * from supply_category", new SupplyCategoryMapper());
+	public List<SupplyCategory> getSupplyCategories() {		return getJdbcTemplateObject().query("select * from supply_category", new SupplyCategoryMapper());
+		
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<CompanyPosition> getPositions() {
+		return getJdbcTemplateObject().query("select * from company_positions", new CompanyPositionsMapper());
 	}
 	
 }

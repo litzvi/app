@@ -69,6 +69,8 @@ public abstract class DataAccessObject {
 			throw new AccessControlException("User permission wasn't set");
 		}
 		if(!permission.hasPermission(this)) {
+			System.out.println(this.getClass().getSimpleName());
+			System.out.println(permission.getClass().getSimpleName());
 			throw new AccessControlException("User has no access permission");
 		}
 		this.permission = permission;

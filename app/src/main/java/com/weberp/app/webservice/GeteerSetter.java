@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.weberp.app.dataaccessobjects.AppUser;
 import com.weberp.app.dataaccessobjects.BussinessContactDAO;
 import com.weberp.app.dataobjects.City;
+import com.weberp.app.dataobjects.CompanyPosition;
 import com.weberp.app.dataobjects.Country;
 import com.weberp.app.dataobjects.Order;
 import com.weberp.app.dataobjects.Position;
@@ -31,20 +32,18 @@ public class GeteerSetter {
 	
 	@Autowired DataSource ds;
 
+	BussinessContactDAO dao;
 	public GeteerSetter() {
-		// TODO Auto-generated constructor stub
+		ApplicationContext context = new AnnotationConfigApplicationContext("com.weberp.app");
+		AppUser user = context.getBean("appUser", AppUser.class);
+		user.setUserDBA();
+		dao = context.getBean("bussinessContactDAO", BussinessContactDAO.class);
 	}
 	
 	@GET
 	@Path("/suplliersetup")
 	@Produces("application/json")
 	public String getSetup() {
-		
-		ApplicationContext context = new AnnotationConfigApplicationContext("com.weberp.app");
-		AppUser user = context.getBean("appUser", AppUser.class);
-		user.setUserDBA();
-		BussinessContactDAO dao = context.getBean("bussinessContactDAO", BussinessContactDAO.class);
-		
 		List<Object> result = new ArrayList<Object>();
 		List<City> cityholder = dao.getCities();
 		result.add(cityholder);
@@ -52,10 +51,8 @@ public class GeteerSetter {
 		result.add(countryholder);
 		List<SupplyCategory> Supplyholder = dao.getSupplyCategories();
 		result.add(Supplyholder);
-		//List<Position> Positionholder = dao.getCountries();
-	      
-
-	      
+		List<CompanyPosition> Positionholder = dao.getPositions();
+		result.add(Positionholder);  
 		return new Gson().toJson(result);
 	}
 	
@@ -67,6 +64,7 @@ public class GeteerSetter {
 		System.out.println(product);
 		Supplier bean = new Gson().fromJson(product, Supplier.class); 
 		System.out.println(bean);
+		dao.addSupplier(bean);
 		return Response.status(201).build();
 	}
 	
