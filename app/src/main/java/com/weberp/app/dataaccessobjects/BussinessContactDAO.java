@@ -3,8 +3,10 @@
  */
 package com.weberp.app.dataaccessobjects;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -12,7 +14,11 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.CallableStatementCallback;
+import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -25,11 +31,16 @@ import com.weberp.app.dataobjects.Company;
 import com.weberp.app.dataobjects.CompanyPosition;
 import com.weberp.app.dataobjects.Country;
 import com.weberp.app.dataobjects.Supplier;
+import com.weberp.app.dataobjects.SupplierEmptyForm;
 import com.weberp.app.dataobjects.SupplyCategory;
 import com.weberp.app.dataobjects.mappers.CityMapper;
+import com.weberp.app.dataobjects.mappers.CityResultSetExtractor;
 import com.weberp.app.dataobjects.mappers.CountryMapper;
+import com.weberp.app.dataobjects.mappers.CountryResultSetExtractor;
 import com.weberp.app.dataobjects.mappers.CompanyPositionsMapper;
+import com.weberp.app.dataobjects.mappers.CompanyPositionsResultSetExtractor;
 import com.weberp.app.dataobjects.mappers.SupplyCategoryMapper;
+import com.weberp.app.dataobjects.mappers.SupplyCategoryResultSetExtractor;
 
 /**
  * @author Zvi
@@ -87,12 +98,53 @@ public class BussinessContactDAO extends DataAccessObject {
 		return keyHolder.getKey().intValue();
 	}
 	
+	public SupplierEmptyForm getSupplierEmptyForm() {
+		return getJdbcTemplateObject().execute(
+				new CallableStatementCreator() {
+			
+					public CallableStatement createCallableStatement(Connection con) throws SQLException {
+						return con.prepareCall("SupplierEmptyForm");
+					}
+				}, 
+				new CallableStatementCallback<SupplierEmptyForm>() {
+
+					public SupplierEmptyForm doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
+						SupplierEmptyForm supplierEmptyForm = new SupplierEmptyForm();
+						ResultSet rs;					
+						do {
+							rs = cs.getResultSet();
+							if(rs == null) {
+								throw new DataRetrievalFailureException("Couldn't fetch supplier form dropdown information");
+							}
+							String tableName = rs.getMetaData().getTableName(1);
+							if(tableName.equals("countries")) {
+								supplierEmptyForm.setCountries(new CountryResultSetExtractor().extractData(rs));
+							}
+							else if(tableName.equals("cities")) {
+								supplierEmptyForm.setCities(new CityResultSetExtractor().extractData(rs));
+							}
+							else if(tableName.equals("supply_category")) {
+								supplierEmptyForm.setCategories(new SupplyCategoryResultSetExtractor().extractData(rs));
+							}
+							else if(tableName.equals("company_positions")) {
+								supplierEmptyForm.setPositions(new CompanyPositionsResultSetExtractor().extractData(rs));
+							}
+						}while(cs.getMoreResults());
+	
+						
+						return supplierEmptyForm;
+					}
+				
+				}
+			);
+	}
+	
 	/**
 	 * 
 	 * @return
 	 */
 	public List<Country> getCountries() {
-		return getJdbcTemplateObject().query("select * from countries", new CountryMapper());
+		return getJdbcTemplateObject().query("select * from countries", new CountryResultSetExtractor());
 	}
 	
 	/**
@@ -100,7 +152,7 @@ public class BussinessContactDAO extends DataAccessObject {
 	 * @return
 	 */
 	public List<City> getCities() {
-		return getJdbcTemplateObject().query("select * from cities", new CityMapper());
+		return getJdbcTemplateObject().query("select * from cities", new CityResultSetExtractor());
 	}
 	
 	
@@ -109,7 +161,7 @@ public class BussinessContactDAO extends DataAccessObject {
 	 * @return
 	 */
 	public List<SupplyCategory> getSupplyCategories() {
-		return getJdbcTemplateObject().query("select * from supply_category", new SupplyCategoryMapper());
+		return getJdbcTemplateObject().query("select * from supply_category", new SupplyCategoryResultSetExtractor());
 	}
 	
 	/**
@@ -117,7 +169,7 @@ public class BussinessContactDAO extends DataAccessObject {
 	 * @return
 	 */
 	public List<CompanyPosition> getPositions() {
-		return getJdbcTemplateObject().query("select * from company_positions", new CompanyPositionsMapper());
+		return getJdbcTemplateObject().query("select * from company_positions", new CompanyPositionsResultSetExtractor());
 	}
 	
 }
