@@ -39,6 +39,7 @@ import com.weberp.app.dataobjects.mappers.CountryMapper;
 import com.weberp.app.dataobjects.mappers.CountryResultSetExtractor;
 import com.weberp.app.dataobjects.mappers.CompanyPositionsMapper;
 import com.weberp.app.dataobjects.mappers.CompanyPositionsResultSetExtractor;
+
 import com.weberp.app.dataobjects.mappers.SupplyCategoryMapper;
 import com.weberp.app.dataobjects.mappers.SupplyCategoryResultSetExtractor;
 

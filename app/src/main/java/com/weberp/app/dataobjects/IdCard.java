@@ -3,7 +3,7 @@
  */
 package com.weberp.app.dataobjects;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * @author Zvi
@@ -11,9 +11,31 @@ import java.sql.Date;
  */
 public class IdCard {
 	private String idNumber;
-	private String nationality;
+	private Country nationality;
 	private Date dateOfIssue;
 	private String placeOfIssue;
+	
+	
+	public IdCard(String idNumber, Country nationality, Date dateOfIssue, String placeOfIssue) {
+		super();
+		this.idNumber = idNumber;
+		this.nationality = nationality;
+		this.dateOfIssue = dateOfIssue;
+		this.placeOfIssue = placeOfIssue;
+	}
+	
+	
+
+
+	@Override
+	public String toString() {
+		return "IdCard [idNumber=" + idNumber + ", nationality=" + nationality + ", dateOfIssue=" + dateOfIssue
+				+ ", placeOfIssue=" + placeOfIssue + "]";
+	}
+
+
+
+
 	/**
 	 * @return the idNumber
 	 */
@@ -29,13 +51,13 @@ public class IdCard {
 	/**
 	 * @return the nationality
 	 */
-	public String getNationality() {
+	public Country getNationality() {
 		return nationality;
 	}
 	/**
 	 * @param nationality the nationality to set
 	 */
-	public void setNationality(String nationality) {
+	public void setNationality(Country nationality) {
 		this.nationality = nationality;
 	}
 	/**
