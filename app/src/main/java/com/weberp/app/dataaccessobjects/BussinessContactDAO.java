@@ -3,6 +3,7 @@
  */
 package com.weberp.app.dataaccessobjects;
 
+import java.io.UncheckedIOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -104,19 +105,19 @@ public class BussinessContactDAO extends DataAccessObject {
 				new CallableStatementCreator() {
 			
 					public CallableStatement createCallableStatement(Connection con) throws SQLException {
-						return con.prepareCall("SupplierEmptyForm");
+						return con.prepareCall("{ CALL SupplierEmptyForm() }");
 					}
 				}, 
 				new CallableStatementCallback<SupplierEmptyForm>() {
 
 					public SupplierEmptyForm doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
 						SupplierEmptyForm supplierEmptyForm = new SupplierEmptyForm();
-						ResultSet rs;					
-						do {
-							rs = cs.getResultSet();
-							if(rs == null) {
-								throw new DataRetrievalFailureException("Couldn't fetch supplier form dropdown information");
-							}
+						ResultSet rs = cs.executeQuery();
+						if(rs == null) {
+							throw new DataRetrievalFailureException("Couldn't fetch supplier form dropdown information");
+						}
+						boolean hasRS = true;
+						while(hasRS) {
 							String tableName = rs.getMetaData().getTableName(1);
 							if(tableName.equals("countries")) {
 								supplierEmptyForm.setCountries(new CountryResultSetExtractor().extractData(rs));
@@ -130,7 +131,17 @@ public class BussinessContactDAO extends DataAccessObject {
 							else if(tableName.equals("company_positions")) {
 								supplierEmptyForm.setPositions(new CompanyPositionsResultSetExtractor().extractData(rs));
 							}
-						}while(cs.getMoreResults());
+							else {
+								throw new DataRetrievalFailureException("Stored Procedure returned unexpected results");
+							}
+							
+							if(cs.getMoreResults()) {
+								rs = cs.getResultSet();
+							}
+							else {
+								hasRS = false;
+							}
+						}
 	
 						
 						return supplierEmptyForm;
